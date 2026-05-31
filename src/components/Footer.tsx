@@ -11,7 +11,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-3 font-bold text-lg mb-4">
-              <img src="/Company_Logo_Design.png" alt="MicroMac Solutions" className="h-10 w-auto" />
+              <img src="/Company_Logo_Design-2.png" alt="MicroMac Solutions" className="h-10 w-auto" />
               <span className="text-slate-50">MicroMac</span>
             </div>
             <p className="text-sm text-slate-500">

@@ -21,7 +21,7 @@ export default function Header({ activeSection, setActiveSection }: HeaderProps)
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-3 font-bold text-xl tracking-tight">
-          <img src="/Company_Logo_Design.png" alt="MicroMac Solutions" className="h-10 w-auto" />
+          <img src="/Company_Logo_Design-2.png" alt="MicroMac Solutions" className="h-10 w-auto" />
           <span className="text-slate-50 hidden sm:inline">MicroMac</span>
         </div>
 
