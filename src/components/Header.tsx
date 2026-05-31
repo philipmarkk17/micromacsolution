@@ -20,11 +20,9 @@ export default function Header({ activeSection, setActiveSection }: HeaderProps)
     <header className="fixed top-0 w-full bg-slate-950/80 backdrop-blur-md border-b border-slate-800/50 z-50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center gap-2 font-bold text-xl tracking-tight">
-          <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-blue-600 rounded flex items-center justify-center">
-            <span className="text-slate-950 font-bold">μ</span>
-          </div>
-          <span className="text-slate-50">MicroMac</span>
+        <div className="flex items-center gap-3 font-bold text-xl tracking-tight">
+          <img src="/Company_Logo_Design.png" alt="MicroMac Solutions" className="h-10 w-auto" />
+          <span className="text-slate-50 hidden sm:inline">MicroMac</span>
         </div>
 
         {/* Desktop Navigation */}

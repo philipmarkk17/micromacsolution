@@ -10,10 +10,8 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 font-bold text-lg mb-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-blue-600 rounded flex items-center justify-center">
-                <span className="text-slate-950 font-bold">μ</span>
-              </div>
+            <div className="flex items-center gap-3 font-bold text-lg mb-4">
+              <img src="/Company_Logo_Design.png" alt="MicroMac Solutions" className="h-10 w-auto" />
               <span className="text-slate-50">MicroMac</span>
             </div>
             <p className="text-sm text-slate-500">
