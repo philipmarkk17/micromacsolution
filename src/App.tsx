@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Header from './components/Header';
-import Hero3D from './components/Hero3D';
+import Hero from './components/Hero';
 import Overview from './components/Overview';
 import Challenge from './components/Challenge';
 import Services from './components/Services';
@@ -20,7 +20,7 @@ function App() {
         <BookingPage setCurrentPage={setCurrentPage} />
       ) : (
         <>
-          <Hero3D setCurrentPage={setCurrentPage} />
+          <Hero setCurrentPage={setCurrentPage} />
           <Overview />
           <Challenge />
           <Services />
