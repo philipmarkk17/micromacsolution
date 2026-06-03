@@ -1,10 +1,17 @@
 import { Phone, Mail, Globe, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
 interface ContactProps {
   setCurrentPage: (page: 'home' | 'booking') => void;
 }
 
 export default function Contact({ setCurrentPage }: ContactProps) {
+  const { ref, inView } = useInView({
+    threshold: 0.2,
+    triggerOnce: true,
+  });
+
   const contactMethods = [
     {
       icon: Phone,
@@ -32,11 +39,41 @@ export default function Contact({ setCurrentPage }: ContactProps) {
     },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 40, rotateX: 25 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      transition: {
+        duration: 0.7,
+        ease: 'easeOut',
+      },
+    },
+  };
+
   return (
-    <section id="contact" className="py-20 px-6 bg-gradient-to-b from-slate-900 to-slate-950">
+    <section id="contact" className="py-20 px-6 bg-gradient-to-b from-slate-900 to-slate-950" ref={ref}>
       <div className="max-w-6xl mx-auto">
         {/* Main CTA */}
-        <div className="mb-16 p-12 bg-gradient-to-r from-cyan-500/10 via-slate-900/50 to-blue-500/10 border border-cyan-500/20 rounded-2xl">
+        <motion.div
+          className="mb-16 p-12 bg-gradient-to-r from-cyan-500/10 via-slate-900/50 to-blue-500/10 border border-cyan-500/20 rounded-2xl"
+          initial="hidden"
+          animate={inView ? 'visible' : 'hidden'}
+          variants={itemVariants}
+          whileHover={{ scale: 1.02, rotateX: -5 }}
+        >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="text-slate-50">Ready to Transform</span>
             <br />
@@ -47,51 +84,68 @@ export default function Contact({ setCurrentPage }: ContactProps) {
           <p className="text-slate-400 text-lg max-w-2xl mt-4">
             Serving SME businesses across Klang Valley — let our specialists assess your current infrastructure and design a plan that fits your needs and budget.
           </p>
-        </div>
+        </motion.div>
 
         {/* Contact Methods */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
+        <motion.div
+          className="grid md:grid-cols-3 gap-8 mb-16"
+          initial="hidden"
+          animate={inView ? 'visible' : 'hidden'}
+          variants={containerVariants}
+        >
           {contactMethods.map((method, index) => {
             const Icon = method.icon;
             return (
-              <div
+              <motion.div
                 key={index}
                 className="group p-8 bg-gradient-to-br from-slate-800/40 to-slate-900/60 border border-slate-700/50 rounded-xl hover:border-cyan-500/30 transition-all duration-300"
+                variants={itemVariants}
+                whileHover={{
+                  scale: 1.05,
+                  rotateY: 5,
+                }}
               >
                 <Icon className={`${method.color} mb-4 group-hover:scale-110 transition-transform`} size={32} />
                 <h3 className="text-xl font-bold text-slate-50 mb-2">{method.title}</h3>
                 <p className="text-slate-400 mb-6">{method.description}</p>
-                <button
+                <motion.button
                   onClick={method.onClick ? method.onClick : undefined}
                   className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 font-medium transition-colors group/btn"
+                  whileHover={{ x: 5 }}
                 >
                   {method.action}
                   <ArrowRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
-                </button>
-              </div>
+                </motion.button>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
 
         {/* Trust Signals */}
-        <div className="grid md:grid-cols-4 gap-6 p-8 bg-slate-800/20 border border-slate-700/50 rounded-xl">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-cyan-400 mb-1">24/7</div>
-            <p className="text-sm text-slate-400">Monitoring & Support</p>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-cyan-400 mb-1">4-Tier</div>
-            <p className="text-sm text-slate-400">Support Coverage</p>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-cyan-400 mb-1">1 Vendor</div>
-            <p className="text-sm text-slate-400">All Your Needs</p>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-cyan-400 mb-1">ISO Ready</div>
-            <p className="text-sm text-slate-400">Compliance Support</p>
-          </div>
-        </div>
+        <motion.div
+          className="grid md:grid-cols-4 gap-6 p-8 bg-slate-800/20 border border-slate-700/50 rounded-xl"
+          initial="hidden"
+          animate={inView ? 'visible' : 'hidden'}
+          variants={containerVariants}
+        >
+          {[
+            { number: '24/7', label: 'Monitoring & Support' },
+            { number: '4-Tier', label: 'Support Coverage' },
+            { number: '1 Vendor', label: 'All Your Needs' },
+            { number: 'ISO Ready', label: 'Compliance Support' },
+          ].map((item, index) => (
+            <motion.div key={index} className="text-center" variants={itemVariants}>
+              <motion.div
+                className="text-2xl font-bold text-cyan-400 mb-1"
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 2, delay: index * 0.2, repeat: Infinity }}
+              >
+                {item.number}
+              </motion.div>
+              <p className="text-sm text-slate-400">{item.label}</p>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

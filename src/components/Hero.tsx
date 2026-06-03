@@ -1,39 +1,92 @@
 import { ArrowRight, Shield } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
 interface HeroProps {
   setCurrentPage: (page: 'home' | 'booking') => void;
 }
 
 export default function Hero({ setCurrentPage }: HeroProps) {
+  const { ref, inView } = useInView({
+    threshold: 0.3,
+    triggerOnce: true,
+  });
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20, rotateX: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      transition: {
+        duration: 0.8,
+        ease: 'easeOut',
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, x: -50, rotateY: -30 },
+    visible: (i: number) => ({
+      opacity: 1,
+      x: 0,
+      rotateY: 0,
+      transition: {
+        duration: 0.8,
+        delay: i * 0.15,
+        ease: 'easeOut',
+      },
+    }),
+  };
+
   return (
-    <section id="home" className="pt-32 pb-20 px-6 relative overflow-hidden">
+    <section id="home" className="pt-32 pb-20 px-6 relative overflow-hidden" ref={ref}>
       {/* Background gradient orbs */}
       <div className="absolute top-20 right-0 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl -z-10"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl -z-10"></div>
 
-      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      <motion.div
+        className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center"
+        initial="hidden"
+        animate={inView ? 'visible' : 'hidden'}
+        variants={containerVariants}
+      >
         {/* Left Content */}
         <div className="space-y-8">
           <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full">
+            <motion.div
+              className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full"
+              variants={itemVariants}
+            >
               <Shield size={16} className="text-cyan-400" />
               <span className="text-sm font-medium text-cyan-400">Enterprise IT Support</span>
-            </div>
+            </motion.div>
 
-            <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
+            <motion.h1 className="text-5xl md:text-6xl font-bold tracking-tight" variants={itemVariants}>
               <span className="text-slate-50">Your Virtual</span>
               <br />
               <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-cyan-300 bg-clip-text text-transparent">
                 IT Department
               </span>
-            </h1>
+            </motion.h1>
 
-            <p className="text-lg text-slate-400 leading-relaxed max-w-lg">
+            <motion.p className="text-lg text-slate-400 leading-relaxed max-w-lg" variants={itemVariants}>
               Enterprise-grade IT support tailored for growing SME businesses. One vendor. All your needs covered.
-            </p>
+            </motion.p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          <motion.div className="flex flex-col sm:flex-row gap-4" variants={itemVariants}>
             <button
               onClick={() => setCurrentPage('booking')}
               className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-cyan-500/50 transition-all duration-300 flex items-center gap-2 group"
@@ -44,10 +97,10 @@ export default function Hero({ setCurrentPage }: HeroProps) {
             <button className="px-8 py-3 bg-slate-800 text-slate-300 rounded-lg font-semibold hover:bg-slate-700 hover:text-slate-100 transition-colors duration-200">
               Learn More
             </button>
-          </div>
+          </motion.div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-6 pt-8 border-t border-slate-800">
+          <motion.div className="grid grid-cols-3 gap-6 pt-8 border-t border-slate-800" variants={itemVariants}>
             <div>
               <div className="text-2xl font-bold text-cyan-400">24/7</div>
               <div className="text-sm text-slate-500">Monitoring</div>
@@ -60,32 +113,50 @@ export default function Hero({ setCurrentPage }: HeroProps) {
               <div className="text-2xl font-bold text-cyan-400">1-Stop</div>
               <div className="text-sm text-slate-500">Solution</div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Right Visual */}
-        <div className="relative hidden md:block">
+        <div className="relative hidden md:block" style={{ perspective: '1000px' }}>
           <div className="space-y-4">
             {/* Card 1 */}
-            <div className="p-6 bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-xl backdrop-blur hover:border-cyan-500/30 transition-colors duration-300">
+            <motion.div
+              className="p-6 bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-xl backdrop-blur hover:border-cyan-500/30 transition-colors duration-300"
+              custom={0}
+              variants={cardVariants}
+              initial="hidden"
+              animate={inView ? 'visible' : 'hidden'}
+            >
               <div className="text-cyan-400 font-semibold mb-2">Network Security</div>
               <div className="text-sm text-slate-400">Firewall configuration & 24/7 threat monitoring</div>
-            </div>
+            </motion.div>
 
             {/* Card 2 */}
-            <div className="p-6 bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-xl backdrop-blur hover:border-blue-500/30 transition-colors duration-300 ml-8">
+            <motion.div
+              className="p-6 bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-xl backdrop-blur hover:border-blue-500/30 transition-colors duration-300 ml-8"
+              custom={1}
+              variants={cardVariants}
+              initial="hidden"
+              animate={inView ? 'visible' : 'hidden'}
+            >
               <div className="text-blue-400 font-semibold mb-2">Infrastructure Management</div>
               <div className="text-sm text-slate-400">Server health & cloud integration optimized</div>
-            </div>
+            </motion.div>
 
             {/* Card 3 */}
-            <div className="p-6 bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-xl backdrop-blur hover:border-cyan-500/30 transition-colors duration-300">
+            <motion.div
+              className="p-6 bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-xl backdrop-blur hover:border-cyan-500/30 transition-colors duration-300"
+              custom={2}
+              variants={cardVariants}
+              initial="hidden"
+              animate={inView ? 'visible' : 'hidden'}
+            >
               <div className="text-cyan-400 font-semibold mb-2">Disaster Recovery</div>
               <div className="text-sm text-slate-400">Backup & recovery planning with tested protocols</div>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

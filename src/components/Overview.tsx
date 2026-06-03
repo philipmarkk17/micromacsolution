@@ -1,6 +1,13 @@
 import { AlertTriangle, Zap, Lock, TrendingUp } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
 export default function Overview() {
+  const { ref, inView } = useInView({
+    threshold: 0.2,
+    triggerOnce: true,
+  });
+
   const items = [
     {
       number: '01',
@@ -32,10 +39,34 @@ export default function Overview() {
     },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 40, rotateX: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      transition: {
+        duration: 0.7,
+        ease: 'easeOut',
+      },
+    },
+  };
+
   return (
-    <section id="overview" className="py-20 px-6 bg-gradient-to-b from-slate-950 to-slate-900/50">
+    <section id="overview" className="py-20 px-6 bg-gradient-to-b from-slate-950 to-slate-900/50" ref={ref}>
       <div className="max-w-6xl mx-auto">
-        <div className="mb-16">
+        <motion.div className="mb-16" initial="hidden" animate={inView ? 'visible' : 'hidden'} variants={itemVariants}>
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
               Why MicroMac
@@ -44,15 +75,26 @@ export default function Overview() {
           <p className="text-slate-400 text-lg max-w-2xl">
             We provide enterprise-grade IT infrastructure at SME scale with dedicated expertise across all support levels.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <motion.div
+          className="grid md:grid-cols-2 gap-8"
+          initial="hidden"
+          animate={inView ? 'visible' : 'hidden'}
+          variants={containerVariants}
+        >
           {items.map((item, index) => {
             const Icon = item.icon;
             return (
-              <div
+              <motion.div
                 key={index}
                 className="group p-8 bg-gradient-to-br from-slate-800/30 to-slate-900/50 border border-slate-700/50 rounded-xl hover:border-cyan-500/30 transition-all duration-300 hover:bg-slate-800/50"
+                variants={itemVariants}
+                whileHover={{
+                  scale: 1.05,
+                  rotateX: -5,
+                  rotateY: 5,
+                }}
               >
                 <div className="flex items-start gap-6">
                   <div className="flex-shrink-0">
@@ -66,10 +108,10 @@ export default function Overview() {
                     <p className="text-slate-400 leading-relaxed">{item.description}</p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

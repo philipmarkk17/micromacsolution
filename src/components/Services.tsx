@@ -1,6 +1,13 @@
 import { Shield, Search, Server, FileText } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
 export default function Services() {
+  const { ref, inView } = useInView({
+    threshold: 0.2,
+    triggerOnce: true,
+  });
+
   const services = [
     {
       icon: Shield,
@@ -59,25 +66,59 @@ export default function Services() {
     },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30, rotateX: 15 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      transition: {
+        duration: 0.6,
+        ease: 'easeOut',
+      },
+    },
+  };
+
   return (
-    <section id="services" className="py-20 px-6 bg-gradient-to-b from-slate-950 to-slate-900">
+    <section id="services" className="py-20 px-6 bg-gradient-to-b from-slate-950 to-slate-900" ref={ref}>
       <div className="max-w-6xl mx-auto">
         {/* Core Services */}
         <div className="mb-24">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <motion.h2 className="text-4xl md:text-5xl font-bold mb-4" initial="hidden" animate={inView ? 'visible' : 'hidden'} variants={itemVariants}>
             <span className="text-slate-50">Core Services</span>
-          </h2>
-          <p className="text-slate-400 text-lg max-w-2xl mb-12">
+          </motion.h2>
+          <motion.p className="text-slate-400 text-lg max-w-2xl mb-12" initial="hidden" animate={inView ? 'visible' : 'hidden'} variants={itemVariants}>
             Comprehensive IT solutions covering security, infrastructure and compliance.
-          </p>
+          </motion.p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <motion.div
+            className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+            initial="hidden"
+            animate={inView ? 'visible' : 'hidden'}
+            variants={containerVariants}
+          >
             {services.map((service, index) => {
               const Icon = service.icon;
               return (
-                <div
+                <motion.div
                   key={index}
                   className="group p-6 bg-gradient-to-br from-slate-800/40 to-slate-900/60 border border-slate-700/50 rounded-xl hover:border-cyan-500/30 transition-all duration-300"
+                  variants={itemVariants}
+                  whileHover={{
+                    scale: 1.08,
+                    rotateY: 5,
+                  }}
                 >
                   <div className="mb-4 p-3 bg-slate-800/50 rounded-lg w-fit group-hover:bg-cyan-500/20 transition-colors">
                     <Icon size={24} className="text-cyan-400 group-hover:text-cyan-300" />
@@ -92,26 +133,36 @@ export default function Services() {
                       </div>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         </div>
 
         {/* Support Model */}
         <div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <motion.h2 className="text-4xl md:text-5xl font-bold mb-4" initial="hidden" animate={inView ? 'visible' : 'hidden'} variants={itemVariants}>
             <span className="text-slate-50">4-Level Support Model</span>
-          </h2>
-          <p className="text-slate-400 text-lg max-w-2xl mb-12">
+          </motion.h2>
+          <motion.p className="text-slate-400 text-lg max-w-2xl mb-12" initial="hidden" animate={inView ? 'visible' : 'hidden'} variants={itemVariants}>
             From helpdesk to strategic consultancy — complete coverage for every IT need.
-          </p>
+          </motion.p>
 
-          <div className="grid md:grid-cols-4 gap-4">
+          <motion.div
+            className="grid md:grid-cols-4 gap-4"
+            initial="hidden"
+            animate={inView ? 'visible' : 'hidden'}
+            variants={containerVariants}
+          >
             {supportLevels.map((level, index) => (
-              <div
+              <motion.div
                 key={index}
                 className="group relative p-6 bg-gradient-to-br from-slate-800/30 to-slate-900/50 border border-slate-700/50 rounded-xl hover:border-opacity-50 transition-all duration-300"
+                variants={itemVariants}
+                whileHover={{
+                  scale: 1.05,
+                  rotateY: -5,
+                }}
               >
                 <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${level.color} rounded-t-xl`}></div>
                 <div className="mb-4">
@@ -124,9 +175,9 @@ export default function Services() {
                 </div>
                 <h3 className="text-lg font-bold text-slate-50 mb-2">{level.type}</h3>
                 <p className="text-slate-400 text-sm leading-relaxed">{level.description}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

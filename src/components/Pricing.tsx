@@ -1,10 +1,17 @@
 import { Check } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
 interface PricingProps {
   setCurrentPage: (page: 'home' | 'booking') => void;
 }
 
 export default function Pricing({ setCurrentPage }: PricingProps) {
+  const { ref, inView } = useInView({
+    threshold: 0.2,
+    triggerOnce: true,
+  });
+
   const plans = [
     {
       name: 'Starter',
@@ -64,37 +71,67 @@ export default function Pricing({ setCurrentPage }: PricingProps) {
     },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 50, rotateX: 30, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      scale: 1,
+      transition: {
+        duration: 0.8,
+        ease: 'easeOut',
+      },
+    },
+  };
+
   return (
-    <section id="pricing" className="py-20 px-6">
+    <section id="pricing" className="py-20 px-6" ref={ref}>
       <div className="max-w-7xl mx-auto">
-        <div className="mb-16 text-center">
+        <motion.div className="mb-16 text-center" initial="hidden" animate={inView ? 'visible' : 'hidden'} variants={itemVariants}>
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="text-slate-50">Flexible Service Plans</span>
           </h2>
           <p className="text-slate-400 text-lg max-w-2xl mx-auto">
             Choose 1-year or 2-year contracts tailored to your business size and IT complexity.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        <motion.div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto" initial="hidden" animate={inView ? 'visible' : 'hidden'} variants={containerVariants}>
           {plans.map((plan, index) => (
-            <div
+            <motion.div
               key={index}
-              className={`relative group transition-all duration-300 ${
-                plan.featured ? 'md:scale-105 md:shadow-2xl md:shadow-cyan-500/20' : ''
-              }`}
+              className={`relative group transition-all duration-300 ${plan.featured ? 'md:scale-105 md:shadow-2xl md:shadow-cyan-500/20' : ''}`}
+              variants={itemVariants}
+              whileHover={{
+                scale: plan.featured ? 1.08 : 1.05,
+                rotateY: 5,
+              }}
             >
               {/* Card */}
-              <div
-                className={`h-full p-8 bg-gradient-to-br ${plan.color} border ${plan.borderColor} rounded-2xl flex flex-col transition-all duration-300`}
-              >
+              <div className={`h-full p-8 bg-gradient-to-br ${plan.color} border ${plan.borderColor} rounded-2xl flex flex-col transition-all duration-300`}>
                 {/* Badge */}
                 {plan.featured && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                  <motion.div
+                    className="absolute -top-4 left-1/2 -translate-x-1/2"
+                    animate={{ y: [0, -5, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
                     <div className={`px-4 py-1 ${plan.badgeColor} border rounded-full text-sm font-semibold whitespace-nowrap`}>
                       Most Popular
                     </div>
-                  </div>
+                  </motion.div>
                 )}
 
                 {/* Header */}
@@ -118,10 +155,16 @@ export default function Pricing({ setCurrentPage }: PricingProps) {
                 {/* Features */}
                 <div className="space-y-4 flex-grow">
                   {plan.features.map((feature, idx) => (
-                    <div key={idx} className="flex items-start gap-3">
+                    <motion.div
+                      key={idx}
+                      className="flex items-start gap-3"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={inView ? { opacity: 1, x: 0 } : {}}
+                      transition={{ delay: idx * 0.1, duration: 0.5 }}
+                    >
                       <Check size={20} className="text-cyan-400 flex-shrink-0 mt-0.5" />
                       <span className="text-slate-300 text-sm leading-relaxed">{feature}</span>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
 
@@ -130,12 +173,18 @@ export default function Pricing({ setCurrentPage }: PricingProps) {
                   <p className="text-xs text-slate-500 text-center">Pricing on request - contact us for quotes</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Additional Info */}
-        <div className="mt-16 grid md:grid-cols-3 gap-6 px-6 py-8 bg-gradient-to-r from-slate-800/30 to-slate-900/50 border border-slate-700/50 rounded-xl">
+        <motion.div
+          className="mt-16 grid md:grid-cols-3 gap-6 px-6 py-8 bg-gradient-to-r from-slate-800/30 to-slate-900/50 border border-slate-700/50 rounded-xl"
+          initial="hidden"
+          animate={inView ? 'visible' : 'hidden'}
+          variants={itemVariants}
+          whileHover={{ scale: 1.02 }}
+        >
           <div>
             <h4 className="font-semibold text-slate-50 mb-2">Onboarding Included</h4>
             <p className="text-sm text-slate-400">Comprehensive assessment and setup for all plans</p>
@@ -148,7 +197,7 @@ export default function Pricing({ setCurrentPage }: PricingProps) {
             <h4 className="font-semibold text-slate-50 mb-2">Add-On Modules</h4>
             <p className="text-sm text-slate-400">ISO compliance package and custom services available</p>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,6 +1,13 @@
 import { Users, Shield, TrendingDown, Network } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
 export default function Challenge() {
+  const { ref, inView } = useInView({
+    threshold: 0.2,
+    triggerOnce: true,
+  });
+
   const challenges = [
     {
       icon: Users,
@@ -36,25 +43,59 @@ export default function Challenge() {
     },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 40, rotateX: 25 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      transition: {
+        duration: 0.7,
+        ease: 'easeOut',
+      },
+    },
+  };
+
   return (
-    <section id="challenge" className="py-20 px-6">
+    <section id="challenge" className="py-20 px-6" ref={ref}>
       <div className="max-w-6xl mx-auto">
-        <div className="mb-16">
+        <motion.div className="mb-16" initial="hidden" animate={inView ? 'visible' : 'hidden'} variants={itemVariants}>
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="text-slate-50">The Challenge</span>
           </h2>
           <p className="text-slate-400 text-lg max-w-2xl">
             SMEs face critical IT gaps that impact security, productivity, and growth. Here's what you're up against.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <motion.div
+          className="grid md:grid-cols-2 gap-6"
+          initial="hidden"
+          animate={inView ? 'visible' : 'hidden'}
+          variants={containerVariants}
+        >
           {challenges.map((challenge, index) => {
             const Icon = challenge.icon;
             return (
-              <div
+              <motion.div
                 key={index}
                 className={`p-8 bg-gradient-to-br ${challenge.color} border ${challenge.borderColor} rounded-xl transition-all duration-300 hover:border-opacity-50 hover:shadow-lg hover:shadow-slate-900/50`}
+                variants={itemVariants}
+                whileHover={{
+                  scale: 1.05,
+                  rotateX: -8,
+                }}
               >
                 <div className="flex items-start gap-4 mb-4">
                   <div className="p-3 bg-slate-800/50 rounded-lg">
@@ -66,19 +107,25 @@ export default function Challenge() {
                   </div>
                 </div>
                 <p className="text-slate-400 leading-relaxed">{challenge.description}</p>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
 
-        <div className="mt-12 p-8 bg-gradient-to-r from-cyan-500/10 via-slate-900 to-blue-500/10 border border-cyan-500/20 rounded-xl">
+        <motion.div
+          className="mt-12 p-8 bg-gradient-to-r from-cyan-500/10 via-slate-900 to-blue-500/10 border border-cyan-500/20 rounded-xl"
+          initial="hidden"
+          animate={inView ? 'visible' : 'hidden'}
+          variants={itemVariants}
+          whileHover={{ scale: 1.02 }}
+        >
           <p className="text-center text-slate-300 leading-relaxed">
             Without dedicated support, businesses risk security breaches, productivity loss and competitive disadvantage.
             <span className="block mt-4 text-slate-400 italic">
               MicroMac Solutions fills these gaps with enterprise-grade support at SME scale.
             </span>
           </p>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
