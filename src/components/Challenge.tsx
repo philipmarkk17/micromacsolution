@@ -1,6 +1,7 @@
 import { Users, Shield, TrendingDown, Network } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { Interactive3DCard } from './Interactive3DCard';
 
 export default function Challenge() {
   const { ref, inView } = useInView({
@@ -88,26 +89,35 @@ export default function Challenge() {
           {challenges.map((challenge, index) => {
             const Icon = challenge.icon;
             return (
-              <motion.div
+              <Interactive3DCard
                 key={index}
-                className={`p-8 bg-gradient-to-br ${challenge.color} border ${challenge.borderColor} rounded-xl transition-all duration-300 hover:border-opacity-50 hover:shadow-lg hover:shadow-slate-900/50`}
-                variants={itemVariants}
-                whileHover={{
-                  scale: 1.05,
-                  rotateX: -8,
-                }}
+                className="h-full"
+                backContent={
+                  <div className={`p-8 bg-gradient-to-br ${challenge.color} border ${challenge.borderColor} rounded-xl h-full flex items-center justify-center`}>
+                    <p className="text-slate-300 text-center text-sm">Understanding the challenge is the first step to solving it.</p>
+                  </div>
+                }
               >
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="p-3 bg-slate-800/50 rounded-lg">
-                    <Icon size={24} className="text-slate-300" />
+                <motion.div
+                  className={`p-8 bg-gradient-to-br ${challenge.color} border ${challenge.borderColor} rounded-xl transition-all duration-300 hover:border-opacity-50 hover:shadow-lg hover:shadow-slate-900/50 h-full`}
+                  variants={itemVariants}
+                  whileHover={{
+                    scale: 1.05,
+                    rotateX: -8,
+                  }}
+                >
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="p-3 bg-slate-800/50 rounded-lg">
+                      <Icon size={24} className="text-slate-300" />
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-slate-50">{challenge.percentage}</div>
+                      <p className="text-sm text-slate-400">{challenge.title}</p>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-2xl font-bold text-slate-50">{challenge.percentage}</div>
-                    <p className="text-sm text-slate-400">{challenge.title}</p>
-                  </div>
-                </div>
-                <p className="text-slate-400 leading-relaxed">{challenge.description}</p>
-              </motion.div>
+                  <p className="text-slate-400 leading-relaxed">{challenge.description}</p>
+                </motion.div>
+              </Interactive3DCard>
             );
           })}
         </motion.div>

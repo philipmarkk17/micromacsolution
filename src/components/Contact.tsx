@@ -1,6 +1,7 @@
 import { Phone, Mail, Globe, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { MouseGradient } from './MouseGradient';
 
 interface ContactProps {
   setCurrentPage: (page: 'home' | 'booking') => void;
@@ -87,12 +88,13 @@ export default function Contact({ setCurrentPage }: ContactProps) {
         </motion.div>
 
         {/* Contact Methods */}
-        <motion.div
-          className="grid md:grid-cols-3 gap-8 mb-16"
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
-          variants={containerVariants}
-        >
+        <MouseGradient className="mb-16">
+          <motion.div
+            className="grid md:grid-cols-3 gap-8"
+            initial="hidden"
+            animate={inView ? 'visible' : 'hidden'}
+            variants={containerVariants}
+          >
           {contactMethods.map((method, index) => {
             const Icon = method.icon;
             return (
@@ -119,7 +121,8 @@ export default function Contact({ setCurrentPage }: ContactProps) {
               </motion.div>
             );
           })}
-        </motion.div>
+          </motion.div>
+        </MouseGradient>
 
         {/* Trust Signals */}
         <motion.div

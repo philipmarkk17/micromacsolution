@@ -1,6 +1,7 @@
 import { ArrowRight, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { Interactive3DBackground } from './Interactive3DBackground';
 
 interface HeroProps {
   setCurrentPage: (page: 'home' | 'booking') => void;
@@ -51,13 +52,16 @@ export default function Hero({ setCurrentPage }: HeroProps) {
   };
 
   return (
-    <section id="home" className="pt-32 pb-20 px-6 relative overflow-hidden" ref={ref}>
-      {/* Background gradient orbs */}
+    <section id="home" className="relative pt-32 pb-20 px-6 overflow-hidden min-h-screen flex items-center" ref={ref}>
+      {/* Interactive 3D Background */}
+      <Interactive3DBackground />
+
+      {/* Background gradient orbs - original fallback */}
       <div className="absolute top-20 right-0 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl -z-10"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl -z-10"></div>
 
       <motion.div
-        className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center"
+        className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10"
         initial="hidden"
         animate={inView ? 'visible' : 'hidden'}
         variants={containerVariants}

@@ -1,6 +1,7 @@
 import { Shield, Search, Server, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { Interactive3DCard } from './Interactive3DCard';
 
 export default function Services() {
   const { ref, inView } = useInView({
@@ -111,29 +112,40 @@ export default function Services() {
             {services.map((service, index) => {
               const Icon = service.icon;
               return (
-                <motion.div
+                <Interactive3DCard
                   key={index}
-                  className="group p-6 bg-gradient-to-br from-slate-800/40 to-slate-900/60 border border-slate-700/50 rounded-xl hover:border-cyan-500/30 transition-all duration-300"
-                  variants={itemVariants}
-                  whileHover={{
-                    scale: 1.08,
-                    rotateY: 5,
-                  }}
+                  className="h-full"
+                  backContent={
+                    <div className="p-6 bg-gradient-to-br from-slate-800/40 to-slate-900/60 border border-slate-700/50 rounded-xl h-full flex flex-col justify-center">
+                      <p className="text-slate-300 text-sm leading-relaxed">
+                        Click for more details about {service.title}
+                      </p>
+                    </div>
+                  }
                 >
-                  <div className="mb-4 p-3 bg-slate-800/50 rounded-lg w-fit group-hover:bg-cyan-500/20 transition-colors">
-                    <Icon size={24} className="text-cyan-400 group-hover:text-cyan-300" />
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-50 mb-2">{service.title}</h3>
-                  <p className="text-slate-400 text-sm mb-4 leading-relaxed">{service.description}</p>
-                  <div className="space-y-2">
-                    {service.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-xs text-slate-400">
-                        <div className="w-1.5 h-1.5 bg-cyan-500 rounded-full"></div>
-                        {feature}
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
+                  <motion.div
+                    className="group p-6 bg-gradient-to-br from-slate-800/40 to-slate-900/60 border border-slate-700/50 rounded-xl hover:border-cyan-500/30 transition-all duration-300 h-full"
+                    variants={itemVariants}
+                    whileHover={{
+                      scale: 1.08,
+                      rotateY: 5,
+                    }}
+                  >
+                    <div className="mb-4 p-3 bg-slate-800/50 rounded-lg w-fit group-hover:bg-cyan-500/20 transition-colors">
+                      <Icon size={24} className="text-cyan-400 group-hover:text-cyan-300" />
+                    </div>
+                    <h3 className="text-lg font-bold text-slate-50 mb-2">{service.title}</h3>
+                    <p className="text-slate-400 text-sm mb-4 leading-relaxed">{service.description}</p>
+                    <div className="space-y-2">
+                      {service.features.map((feature, idx) => (
+                        <div key={idx} className="flex items-center gap-2 text-xs text-slate-400">
+                          <div className="w-1.5 h-1.5 bg-cyan-500 rounded-full"></div>
+                          {feature}
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                </Interactive3DCard>
               );
             })}
           </motion.div>

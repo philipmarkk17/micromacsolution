@@ -1,6 +1,7 @@
 import { Check } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { Interactive3DCard } from './Interactive3DCard';
 
 interface PricingProps {
   setCurrentPage: (page: 'home' | 'booking') => void;
@@ -110,17 +111,23 @@ export default function Pricing({ setCurrentPage }: PricingProps) {
 
         <motion.div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto" initial="hidden" animate={inView ? 'visible' : 'hidden'} variants={containerVariants}>
           {plans.map((plan, index) => (
-            <motion.div
+            <Interactive3DCard
               key={index}
-              className={`relative group transition-all duration-300 ${plan.featured ? 'md:scale-105 md:shadow-2xl md:shadow-cyan-500/20' : ''}`}
-              variants={itemVariants}
-              whileHover={{
-                scale: plan.featured ? 1.08 : 1.05,
-                rotateY: 5,
-              }}
+              className={`${plan.featured ? 'md:scale-105 md:shadow-2xl md:shadow-cyan-500/20' : ''}`}
+              backContent={
+                <div className={`h-full p-8 bg-gradient-to-br ${plan.color} border ${plan.borderColor} rounded-2xl flex flex-col justify-center`}>
+                  <p className="text-slate-300 text-center">Click to see pricing details</p>
+                </div>
+              }
             >
-              {/* Card */}
-              <div className={`h-full p-8 bg-gradient-to-br ${plan.color} border ${plan.borderColor} rounded-2xl flex flex-col transition-all duration-300`}>
+              <motion.div
+                className={`h-full p-8 bg-gradient-to-br ${plan.color} border ${plan.borderColor} rounded-2xl flex flex-col transition-all duration-300`}
+                variants={itemVariants}
+                whileHover={{
+                  scale: plan.featured ? 1.08 : 1.05,
+                  rotateY: 5,
+                }}
+              >
                 {/* Badge */}
                 {plan.featured && (
                   <motion.div
@@ -172,8 +179,8 @@ export default function Pricing({ setCurrentPage }: PricingProps) {
                 <div className="mt-8 pt-6 border-t border-slate-700/50">
                   <p className="text-xs text-slate-500 text-center">Pricing on request - contact us for quotes</p>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </Interactive3DCard>
           ))}
         </motion.div>
 
