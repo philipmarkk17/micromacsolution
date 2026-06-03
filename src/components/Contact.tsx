@@ -20,7 +20,8 @@ export default function Contact({ setCurrentPage }: ContactProps) {
       description: 'Available 24/7 for immediate support',
       action: 'Speak with specialist',
       color: 'text-cyan-400',
-      onClick: null,
+      link: 'tel:018-5852208',
+      display: '018-5852208',
     },
     {
       icon: Mail,
@@ -28,7 +29,8 @@ export default function Contact({ setCurrentPage }: ContactProps) {
       description: 'Proposals, consultations & assessments',
       action: 'Send inquiry',
       color: 'text-blue-400',
-      onClick: null,
+      link: 'mailto:techsupport@micromacsolution.com',
+      display: 'techsupport@micromacsolution.com',
     },
     {
       icon: Globe,
@@ -110,14 +112,24 @@ export default function Contact({ setCurrentPage }: ContactProps) {
                 <Icon className={`${method.color} mb-4 group-hover:scale-110 transition-transform`} size={32} />
                 <h3 className="text-xl font-bold text-slate-50 mb-2">{method.title}</h3>
                 <p className="text-slate-400 mb-6">{method.description}</p>
-                <motion.button
-                  onClick={method.onClick ? method.onClick : undefined}
-                  className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 font-medium transition-colors group/btn"
-                  whileHover={{ x: 5 }}
-                >
-                  {method.action}
-                  <ArrowRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
-                </motion.button>
+                {method.link ? (
+                  <a
+                    href={method.link}
+                    className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 font-medium transition-colors group/btn"
+                  >
+                    {method.display}
+                    <ArrowRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
+                  </a>
+                ) : (
+                  <motion.button
+                    onClick={method.onClick ? method.onClick : undefined}
+                    className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 font-medium transition-colors group/btn"
+                    whileHover={{ x: 5 }}
+                  >
+                    {method.action}
+                    <ArrowRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
+                  </motion.button>
+                )}
               </motion.div>
             );
           })}
